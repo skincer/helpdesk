@@ -1,4 +1,7 @@
 package com.sck.helpdesk.repository;
 
-public interface TicketRepository {
+import com.sck.helpdesk.domain.TicketEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TicketRepository extends JpaRepository<TicketEntity, Long> {
 }
