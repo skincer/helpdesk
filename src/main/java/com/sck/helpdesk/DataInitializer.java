@@ -8,6 +8,7 @@ import com.sck.helpdesk.repository.CategoryRepository;
 import com.sck.helpdesk.repository.MessageRepository;
 import com.sck.helpdesk.repository.TicketRepository;
 import com.sck.helpdesk.repository.UserRepository;
+import com.sck.helpdesk.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -18,22 +19,21 @@ public class DataInitializer implements CommandLineRunner {
     private final MessageRepository messageRepository;
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public DataInitializer(CategoryRepository categoryRepository, MessageRepository messageRepository, TicketRepository ticketRepository, UserRepository userRepository) {
+    public DataInitializer(CategoryRepository categoryRepository, MessageRepository messageRepository, TicketRepository ticketRepository, UserRepository userRepository, UserService userService) {
         this.categoryRepository = categoryRepository;
         this.messageRepository = messageRepository;
         this.ticketRepository = ticketRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
     public void run(String... args) throws Exception {
 
-        UserEntity agent = new UserEntity("Sally", "Jones", UserEntity.UserType.AGENT);
-        userRepository.save(agent);
-
-        UserEntity customer = new UserEntity("Bob", "Ross", UserEntity.UserType.CUSTOMER);
-        userRepository.save(customer);
+        UserEntity agent = userService.createUser("sjones", "sjones123", UserEntity.UserType.AGENT);
+        UserEntity customer = userService.createUser("bross", "bross123", UserEntity.UserType.CUSTOMER);
 
         CategoryEntity softwareCategory = new CategoryEntity("Software");
         categoryRepository.save(softwareCategory);
