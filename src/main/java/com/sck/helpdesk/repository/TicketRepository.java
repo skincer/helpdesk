@@ -9,4 +9,7 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<TicketEntity, Long> {
 
     List<TicketEntity> findAllByUserAssignedAndStatus(UserEntity userAssigned, TicketEntity.TicketStatus status);
+
+    List<TicketEntity> findAllByStatus(TicketEntity.TicketStatus status);
+
 }

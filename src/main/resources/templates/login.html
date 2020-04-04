@@ -10,45 +10,55 @@
 <body>
 
 <div class="container">
-    <div class="card mt-5">
-        <div class="card-body">
 
-            <div class="text-center pb-4">
-                <div th:if="${param.error}" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
-                    <h5 class="text-danger" th:text="${errorMsg}">No Error Message Provided.</h5>
+    <div class="row justify-content-center mt-5">
+        <div class="card">
+            <div class="card-body">
+
+                <h2 class="text-center pb-2 text-success">Help Desk</h2>
+
+                <div class="text-center pb-4">
+                    <div th:if="${param.error}" th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+                        <h5 class="text-danger" th:text="${errorMsg}">No Error Message Provided.</h5>
+                    </div>
+                    <div th:if="${param.logout}">
+                        <h5 class="text-info">You have been logged out.</h5>
+                    </div>
+                    <div th:if="${param.expired}">
+                        <h5 class="text-warning">Your session expired or you logged in somewhere else.</h5>
+                    </div>
                 </div>
-                <div th:if="${param.logout}">
-                    <h5 class="text-success">You have been logged out.</h5>
-                </div>
-                <div th:if="${param.expired}">
-                    <h5 class="text-warning">Your session expired or you logged in somewhere else.</h5>
-                </div>
+
+                <h4 class="text-center pb-2">Please Login</h4>
+
+                <form role="form" th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label for="login-username">Username</label>
+                        <input id="login-username" class="form-control" type="text" name="username" spellcheck="false" autocomplete="off"
+                               data-msg-required="Please enter your username." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input id="login-password" class="form-control" type="password" name="password" minlength="6"
+                               data-msg-minlength="Password must be 6 characters or more."
+                               data-msg-required="Please enter your password." required>
+                    </div>
+
+                    <button class="btn btn-primary btn-block" type="submit">Login</button>
+                </form>
             </div>
-
-            <h3 class="text-center pb-2">Please Login</h3>
-
-            <form role="form" th:action="@{/login}" method="post">
-                <div class="form-group">
-                    <label for="login-username">Username</label>
-                    <input id="login-username" class="form-control" type="text" name="username" spellcheck="false" autocomplete="off"
-                           data-msg-required="Please enter your username." required>
-                </div>
-                <div class="form-group">
-                    <label for="login-password">Password</label>
-                    <input id="login-password" class="form-control" type="password" name="password" minlength="6"
-                           data-msg-minlength="Password must be 6 characters or more."
-                           data-msg-required="Please enter your password." required>
-                </div>
-
-                <button class="btn btn-primary btn-block" type="submit">Login</button>
-            </form>
+            <!--
+            <div class="login-footer">
+                Having problems logging in? <a href="#">Help</a>
+            </div>
+            -->
         </div>
-        <!--
-        <div class="login-footer">
-            Having problems logging in? <a href="#">Help</a>
-        </div>
-        -->
+
     </div>
+
+
+
+
 </div>
 
 

@@ -7,19 +7,29 @@
 </head>
 <body>
 
-<div class="container" layout:fragment="content">
+<div layout:fragment="content">
 
-    <div class="row mt-4">
-        <div class="col">
-            <h2>Users</h2>
+    <table class="table table-hover">
 
-            <table class="table table-hover">
-                <caption>Users</caption>
-                </tbody>
-            </table>
-        </div>
+        <table class="table table-hover mt-2 table-sm">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Type</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <th>
+                    <a th:href="@{/app/user/{id}(id=${user.id})}" th:text="${user.username}"></a>
+                </th>
+                <th th:text="${user.type}">Unk</th>
+            </tr>
+            </tbody>
+        </table>
 
-    </div>
+
+    </table>
 
 </div>
 

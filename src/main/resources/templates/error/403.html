@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Forbidden</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.4.1-1/css/bootstrap.min.css}"/>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row justify-content-center mt-5">
+        <div class="card">
+            <div class="card-body">
+
+                <h2 class="text-center pb-2 text-danger">Sorry, you aren't allowed here.</h2>
+
+                <a th:href="@{/app/home}" class="btn btn-outline-info">Return Home</a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+
+<script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.4.1-1/js/bootstrap.min.js}"></script>
+</body>
+</html>

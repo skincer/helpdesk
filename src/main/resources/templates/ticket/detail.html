@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout/mainLayout}">
+<head>
+    <title>Ticket</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${ticket.category.name +': '+ ticket.title}"></h5>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="${ticket.userCreated.username + ', ' + ticket.createdAt}"></h6>
+            <p class="card-text" th:text="${ticket.content}"></p>
+            <a href="#" class="card-link">Resolve</a>
+            <a href="#" class="card-link">Close</a>
+        </div>
+    </div>
+
+
+
+            <table class="table table-hover" th:if="${messages.size() > 0}">
+
+                <table class="table table-hover table-sm">
+                    <thead>
+                    <tr>
+                        <th>Message</th>
+                        <th>From</th>
+                        <th>Sent</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="message : ${messages}">
+                        <th th:text="${message.content}">Unk</th>
+                        <th th:text="${message.createdBy.username}">Unk</th>
+                        <th th:text="${message.createdAt}">Unk</th>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+            </table>
+
+
+</div>
+
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+<th:block layout:fragment="modals">
+
+</th:block>
+</body>
+</html>

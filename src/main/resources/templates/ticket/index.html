@@ -7,19 +7,41 @@
 </head>
 <body>
 
-<div class="container" layout:fragment="content">
-
-    <div class="row mt-4">
-        <div class="col">
-            <h2>Tickets</h2>
+<div layout:fragment="content">
 
             <table class="table table-hover">
-                <caption>Tickets</caption>
+                <caption>Open Tickets</caption>
+
+                <table class="table table-hover mt-2 table-sm">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Created By</th>
+                        <th>Created At</th>
+                        <th>Assigned To</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ticket : ${tickets}">
+                        <th>
+                            <a th:href="@{/app/ticket/{id}(id=${ticket.id})}" th:text="${ticket.title}"></a>
+                        </th>
+                        <th th:text="${ticket.category.name}">Unk</th>
+                        <th>
+                            <a th:href="@{/app/user/{id}(id=${ticket.userCreated.id})}" th:text="${ticket.userCreated.username}"></a>
+                        </th>
+                        <th th:text="${ticket.createdAt}">Unk</th>
+                        <th>
+                            <a th:href="@{/app/user/{id}(id=${ticket.userAssigned.id})}" th:text="${ticket.userAssigned.username}"></a>
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+
 
             </table>
-        </div>
 
-    </div>
 
 </div>
 

@@ -1,6 +1,7 @@
 package com.sck.helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sck.helpdesk.security.CurrentUserUtility;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,9 +30,10 @@ public class MessageEntity {
     public MessageEntity() {
     }
 
-    public MessageEntity(final String content, final TicketEntity ticket) {
+    public MessageEntity(final String content, final TicketEntity ticket, final UserEntity user) {
         this.content =  content;
         this.ticket = ticket;
+        this.createdBy = user;
         this.createdAt = new Date();
     }
 

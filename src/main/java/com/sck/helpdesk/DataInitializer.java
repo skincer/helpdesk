@@ -52,7 +52,8 @@ public class DataInitializer implements CommandLineRunner {
 
         MessageEntity someMessage = new MessageEntity(
                 "Hello, we will come by and swap out your keyboard soon",
-                someTicket
+                someTicket,
+                agent
         );
         messageRepository.save(someMessage);
 
