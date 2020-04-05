@@ -9,15 +9,33 @@
 
 <div layout:fragment="content">
 
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title" th:text="${ticket.category.name +': '+ ticket.title}"></h5>
-            <h6 class="card-subtitle mb-2 text-muted" th:text="${ticket.userCreated.username + ', ' + ticket.createdAt}"></h6>
-            <p class="card-text" th:text="${ticket.content}"></p>
-            <a href="#" class="card-link">Resolve</a>
-            <a href="#" class="card-link">Close</a>
+    <div class="row">
+
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${ticket.category.name +': '+ ticket.title}"></h5>
+                    <h6 class="card-subtitle mb-2 text-muted" th:text="${ticket.userCreated.username + ', ' + ticket.createdAt}"></h6>
+                    <p class="card-text" th:text="${ticket.content}"></p>
+                </div>
+            </div>
         </div>
+
+        <div class="col-2 text-center">
+
+            <div class="btn-group-vertical" role="group">
+                <button type="button" class="btn btn-outline-info">Add Message</button>
+                <button type="button" class="btn btn-outline-success">Close Ticket</button>
+                <button type="button" class="btn btn-outline-primary">Edit Ticket</button>
+                <button type="button" class="btn btn-outline-danger">Delete Ticket</button>
+
+            </div>
+
+        </div>
+
     </div>
+
+
 
 
 

@@ -9,8 +9,24 @@
 
 <div layout:fragment="content">
 
-            <table class="table table-hover">
-                <caption>Open Tickets</caption>
+    <div class="row">
+
+        <div class="col">
+
+            <h3 class="text-muted">All Tickets</h3>
+
+        </div>
+
+        <div class="col-2 text-center">
+
+            <div class="btn-group" role="group">
+                <a class="btn btn-outline-primary" th:href="@{/app/ticket/create}">New Ticket</a>
+            </div>
+
+        </div>
+
+    </div>
+
 
                 <table class="table table-hover mt-2 table-sm">
                     <thead>
@@ -20,6 +36,7 @@
                         <th>Created By</th>
                         <th>Created At</th>
                         <th>Assigned To</th>
+                        <th>Status</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -35,12 +52,13 @@
                         <th>
                             <a th:href="@{/app/user/{id}(id=${ticket.userAssigned.id})}" th:text="${ticket.userAssigned.username}"></a>
                         </th>
+                        <th th:if="${ticket.status == T(com.sck.helpdesk.domain.TicketEntity.TicketStatus).OPEN}" class="text-success" th:text="${ticket.status}">Unk</th>
+                        <th th:if="${ticket.status == T(com.sck.helpdesk.domain.TicketEntity.TicketStatus).CLOSED}" class="text-muted" th:text="${ticket.status}">Unk</th>
                     </tr>
                     </tbody>
                 </table>
 
 
-            </table>
 
 
 </div>

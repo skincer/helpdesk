@@ -43,4 +43,22 @@ public class TicketController {
 
         return "ticket/detail";
     }
+
+    @GetMapping("/edit/{id}")
+    public String displayEdit(Model model, @PathVariable Long id) {
+
+        TicketEntity ticket = ticketRepository.getOne(id);
+        if(ticket == null) return "redirect:/app/home";
+
+        model.addAttribute("ticket", ticket);
+
+        return "ticket/edit";
+    }
+
+    @GetMapping("/create")
+    public String displayCreate(Model model) {
+
+        return "ticket/create";
+    }
+
 }
