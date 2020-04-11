@@ -3,6 +3,7 @@ package com.sck.helpdesk.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Objects;
 
@@ -24,19 +25,24 @@ public class TicketEntity {
     private Date createdAt;
 
     @ManyToOne
+    @NotNull
     private UserEntity userCreated;
 
     @ManyToOne
+    @NotNull
     private UserEntity userAssigned;
 
     @ManyToOne
+    @NotNull
     private CategoryEntity category;
 
     @Enumerated(EnumType.STRING)
     private TicketStatus status = TicketStatus.OPEN;
 
+    @NotNull
     private String title;
 
+    @NotNull
     private String content;
 
     private String resolution;
@@ -44,12 +50,14 @@ public class TicketEntity {
     public TicketEntity() {
     }
 
-    public TicketEntity(final String title, final String content, final UserEntity userCreated) {
+    public TicketEntity(final String title, final String content, final UserEntity userCreated, final UserEntity userAssigned, final CategoryEntity category) {
 
         this.title = title;
         this.content = content;
         this.userCreated = userCreated;
         this.createdAt = new Date();
+        this.userAssigned = userAssigned;
+        this.category = category;
     }
 
     public Long getId() {

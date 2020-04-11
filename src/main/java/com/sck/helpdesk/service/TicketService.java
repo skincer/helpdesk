@@ -28,4 +28,13 @@ public class TicketService {
                 user, TicketEntity.TicketStatus.OPEN
         );
     }
+
+    public List<TicketEntity> openCreatedCurrentUser() {
+
+        UserEntity user = userRepository.findByUsername(CurrentUserUtility.username());
+
+        return ticketRepository.findAllByUserCreatedAndStatus(
+                user, TicketEntity.TicketStatus.OPEN
+        );
+    }
 }

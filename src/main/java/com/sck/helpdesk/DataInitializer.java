@@ -32,8 +32,12 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        UserEntity agent = userService.createUser("sjones", "sjones123", UserEntity.UserType.AGENT);
-        UserEntity customer = userService.createUser("bross", "bross123", UserEntity.UserType.CUSTOMER);
+        UserEntity agent1 = userService.createUser("agent1", "agent123", UserEntity.UserType.AGENT);
+        UserEntity agent2 = userService.createUser("agent2", "agent123", UserEntity.UserType.AGENT);
+        UserEntity agent3 = userService.createUser("agent3", "agent123", UserEntity.UserType.AGENT);
+        UserEntity customer1 = userService.createUser("cust1", "cust123", UserEntity.UserType.CUSTOMER);
+        UserEntity customer2 = userService.createUser("cust2", "cust123", UserEntity.UserType.CUSTOMER);
+        UserEntity customer3 = userService.createUser("cust3", "cust123", UserEntity.UserType.CUSTOMER);
 
         CategoryEntity softwareCategory = new CategoryEntity("Software");
         categoryRepository.save(softwareCategory);
@@ -44,18 +48,27 @@ public class DataInitializer implements CommandLineRunner {
         TicketEntity someTicket = new TicketEntity(
                 "Broken Keyboard",
                 "I accidentally spilled my Capri Sun on my keyboard and now it won't work",
-                customer
+                customer1,
+                userService.retrieveAvailableAgent(),
+                hardwareCategory
         );
-        someTicket.setCategory(hardwareCategory);
-        someTicket.setUserAssigned(agent);
         ticketRepository.save(someTicket);
 
         MessageEntity someMessage = new MessageEntity(
                 "Hello, we will come by and swap out your keyboard soon",
                 someTicket,
-                agent
+                someTicket.getUserAssigned()
         );
         messageRepository.save(someMessage);
+
+        TicketEntity someTicket2 = new TicketEntity(
+                "Page Won't Load",
+                "The website isn't doing anything when I click it!",
+                customer3,
+                userService.retrieveAvailableAgent(),
+                softwareCategory
+        );
+        ticketRepository.save(someTicket2);
 
     }
 }

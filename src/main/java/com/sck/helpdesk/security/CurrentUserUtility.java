@@ -1,10 +1,16 @@
 package com.sck.helpdesk.security;
 
+import com.sck.helpdesk.domain.UserEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public final class CurrentUserUtility {
+
+    public static UserEntity userEntity() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ((CustomUserDetails)authentication.getPrincipal()).getUserEntity();
+    }
 
     public static String username() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

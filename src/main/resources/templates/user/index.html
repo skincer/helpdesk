@@ -34,10 +34,10 @@
             </thead>
             <tbody>
             <tr th:each="user : ${users}">
-                <th>
+                <td>
                     <a th:href="@{/app/user/{id}(id=${user.id})}" th:text="${user.username}"></a>
-                </th>
-                <th th:text="${user.type}">Unk</th>
+                </td>
+                <td th:text="${user.type}">Unk</td>
             </tr>
             </tbody>
         </table>

@@ -41,19 +41,19 @@
                     </thead>
                     <tbody>
                     <tr th:each="ticket : ${tickets}">
-                        <th>
+                        <td>
                             <a th:href="@{/app/ticket/{id}(id=${ticket.id})}" th:text="${ticket.title}"></a>
-                        </th>
-                        <th th:text="${ticket.category.name}">Unk</th>
-                        <th>
+                        </td>
+                        <td th:text="${ticket.category.name}">Unk</td>
+                        <td>
                             <a th:href="@{/app/user/{id}(id=${ticket.userCreated.id})}" th:text="${ticket.userCreated.username}"></a>
-                        </th>
-                        <th th:text="${ticket.createdAt}">Unk</th>
-                        <th>
+                        </td>
+                        <td th:text="${ticket.createdAt}">Unk</td>
+                        <td>
                             <a th:href="@{/app/user/{id}(id=${ticket.userAssigned.id})}" th:text="${ticket.userAssigned.username}"></a>
-                        </th>
-                        <th th:if="${ticket.status == T(com.sck.helpdesk.domain.TicketEntity.TicketStatus).OPEN}" class="text-success" th:text="${ticket.status}">Unk</th>
-                        <th th:if="${ticket.status == T(com.sck.helpdesk.domain.TicketEntity.TicketStatus).CLOSED}" class="text-muted" th:text="${ticket.status}">Unk</th>
+                        </td>
+                        <td th:if="${ticket.status == T(com.sck.helpdesk.domain.TicketEntity.TicketStatus).OPEN}" class="text-success" th:text="${ticket.status}">Unk</td>
+                        <td th:if="${ticket.status == T(com.sck.helpdesk.domain.TicketEntity.TicketStatus).CLOSED}" class="text-muted" th:text="${ticket.status}">Unk</td>
                     </tr>
                     </tbody>
                 </table>
