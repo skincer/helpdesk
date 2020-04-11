@@ -13,29 +13,38 @@
     <div class="row">
 
         <div class="col">
+
+            <div class="card mb-2" th:if="${ticket.resolution}">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Ticket Resolved</h5>
+                    <p class="card-text" th:text="${ticket.resolution}"></p>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title" th:text="${ticket.category.name +': '+ ticket.title}"></h5>
+                    <h5 class="card-title" th:text="${'['+ ticket.status +'] '+ ticket.category.name +': '+ ticket.title}"></h5>
                     <h6 class="card-subtitle mb-2 text-muted small"
-                        th:text="${'Created: ' + ticket.userCreated.username + ', ' + ticket.createdAt}"></h6>
+                        th:text="${'Created: ' + ticket.userCreated.username + ', ' + #dates.format(ticket.createdAt,'YYYY MMM dd, h:mma')}"></h6>
                     <h6 class="card-subtitle mb-2 text-muted small"
                         th:text="${'Assigned: ' + ticket.userAssigned.username}"></h6>
                     <p class="card-text" th:text="${ticket.content}"></p>
                 </div>
             </div>
+
         </div>
 
         <div class="col-2 text-center">
 
             <div class="btn-group-vertical" role="group">
-                <button type="button" class="btn btn-outline-info">
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#messageModal">
                     Message
                     <svg class="bi bi-chat" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M2.678 11.894a1 1 0 01.287.801 10.97 10.97 0 01-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 01.71-.074A8.06 8.06 0 008 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 01-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 00.244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 01-2.347-.306c-.52.263-1.639.742-3.468 1.105z" clip-rule="evenodd"/>
                     </svg>
                 </button>
-                <button type="button" class="btn btn-outline-success" sec:authorize="hasRole('ROLE_AGENT')">
-                    Close
+                <button type="button" class="btn btn-outline-success" sec:authorize="hasRole('ROLE_AGENT')" data-toggle="modal" data-target="#resolveModal">
+                    Resolve
                     <svg class="bi bi-play" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M10.804 8L5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 010 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z" clip-rule="evenodd"/>
                     </svg>
@@ -47,7 +56,7 @@
                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z" clip-rule="evenodd"/>
                     </svg>
                 </button>
-                <button type="button" class="btn btn-outline-danger" sec:authorize="hasRole('ROLE_AGENT')">
+                <button type="button" class="btn btn-outline-danger" sec:authorize="hasRole('ROLE_AGENT')" data-toggle="modal" data-target="#deleteModal">
                     Delete
                     <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"/>
@@ -72,9 +81,10 @@
         </thead>
         <tbody>
         <tr th:each="message : ${messages}">
-        <td th:text="${message.content}">Unk</td>
+        <td th:if="${message.createdBy.type == T(com.sck.helpdesk.domain.UserEntity.UserType).AGENT}"th:text="${message.content}" class="text-info">Unk</td>
+        <td th:if="${message.createdBy.type == T(com.sck.helpdesk.domain.UserEntity.UserType).CUSTOMER}"th:text="${message.content}" class="text-success">Unk</td>
         <td th:text="${message.createdBy.username}">Unk</td>
-        <td th:text="${message.createdAt}">Unk</td>
+        <td th:text="${#dates.format(message.createdAt,'YYYY MMM dd, h:mma')}">Unk</td>
         </tr>
         </tbody>
     </table>
@@ -88,6 +98,100 @@
 </th:block>
 
 <th:block layout:fragment="modals">
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Delete Ticket</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form role="form" th:action="@{/app/ticket/{id}/delete(id=${ticket.id})}" method="post">
+
+                    <div class="modal-body">
+
+                        <p>Just making sure you want to delete this ticket. There is no undo!</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">DELETE</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="resolveModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Resolve Ticket</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form role="form" th:action="@{/app/ticket/{id}/resolve(id=${ticket.id})}"
+                      th:object="${ticketResolveForm}" method="post">
+
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="resolution">Resolution</label>
+                            <p class="text-danger" th:if="${#fields.hasErrors('resolution')}" th:errors="*{resolution}">error</p>
+                            <textarea class="form-control" id="resolution" rows="4" placeholder="Ticket resolved by..." th:field="*{resolution}" required></textarea>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Close Ticket</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="messageModalLabel">Add Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form role="form" th:action="@{/app/ticket/{id}/createMessage(id=${ticket.id})}"
+                      th:object="${messageCreateForm}" method="post">
+
+                <div class="modal-body">
+
+
+                        <div class="form-group">
+                            <label for="content">Content</label>
+                            <p class="text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">error</p>
+                            <textarea class="form-control" id="content" rows="4" placeholder="Go on..." th:field="*{content}" required></textarea>
+                        </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
 
 </th:block>
 </body>

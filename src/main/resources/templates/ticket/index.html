@@ -31,16 +31,18 @@
                 <table class="table table-hover mt-2 table-sm">
                     <thead>
                     <tr>
+                        <th>Created</th>
                         <th>Title</th>
                         <th>Category</th>
                         <th>Created By</th>
-                        <th>Created At</th>
                         <th>Assigned To</th>
                         <th>Status</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="ticket : ${tickets}">
+                        <td th:text="${#dates.format(ticket.createdAt,'YYYY MMM dd, h:mma')}">Unk</td>
+
                         <td>
                             <a th:href="@{/app/ticket/{id}(id=${ticket.id})}" th:text="${ticket.title}"></a>
                         </td>
@@ -48,7 +50,6 @@
                         <td>
                             <a th:href="@{/app/user/{id}(id=${ticket.userCreated.id})}" th:text="${ticket.userCreated.username}"></a>
                         </td>
-                        <td th:text="${ticket.createdAt}">Unk</td>
                         <td>
                             <a th:href="@{/app/user/{id}(id=${ticket.userAssigned.id})}" th:text="${ticket.userAssigned.username}"></a>
                         </td>

@@ -1,7 +1,10 @@
 package com.sck.helpdesk.controller;
 
+import com.sck.helpdesk.domain.MessageEntity;
 import com.sck.helpdesk.domain.TicketEntity;
+import com.sck.helpdesk.dto.MessageCreateForm;
 import com.sck.helpdesk.dto.TicketCreateForm;
+import com.sck.helpdesk.dto.TicketResolveForm;
 import com.sck.helpdesk.repository.CategoryRepository;
 import com.sck.helpdesk.repository.MessageRepository;
 import com.sck.helpdesk.repository.TicketRepository;
@@ -45,7 +48,7 @@ public class TicketController {
     }
 
     @GetMapping("/{id}")
-    public String displayDetail(Model model, @PathVariable Long id) {
+    public String displayDetail(Model model, @PathVariable Long id, MessageCreateForm messageCreateForm, TicketResolveForm ticketResolveForm) {
 
         TicketEntity ticket = ticketRepository.getOne(id);
         if(ticket == null) return "redirect:/app/home";
@@ -89,6 +92,40 @@ public class TicketController {
         TicketEntity createdTicket = ticketRepository.save(ticketEntity);
 
         return "redirect:/app/ticket/" + createdTicket.getId();
+    }
+
+    @PostMapping("/{id}/createMessage")
+    public String handleCreateMessage(Model model, @Valid MessageCreateForm messageCreateForm, @PathVariable Long id) {
+
+        MessageEntity messageEntity = new MessageEntity(
+                messageCreateForm.getContent(),
+                ticketRepository.getOne(id),
+                CurrentUserUtility.userEntity()
+                );
+
+        messageRepository.save(messageEntity);
+
+        return "redirect:/app/ticket/" + id;
+    }
+
+    @PostMapping("/{id}/resolve")
+    public String handleResolve(Model model, @Valid TicketResolveForm ticketResolveForm, @PathVariable Long id) {
+
+        TicketEntity ticketEntity = ticketRepository.getOne(id);
+        ticketEntity.setResolution(ticketResolveForm.getResolution());
+        ticketEntity.setStatus(TicketEntity.TicketStatus.CLOSED);
+
+        ticketRepository.save(ticketEntity);
+
+        return "redirect:/app/ticket/" + id;
+    }
+
+    @PostMapping("/{id}/delete")
+    public String handleDelete(Model model, @PathVariable Long id) {
+
+        ticketRepository.deleteById(id);
+
+        return "redirect:/app/ticket";
     }
 
 }

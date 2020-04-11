@@ -21,7 +21,7 @@ public class TicketEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone="America/New_York")
-    @Column(updatable = false, insertable = false)
+    @Column(updatable = false, insertable = true)
     private Date createdAt;
 
     @ManyToOne
