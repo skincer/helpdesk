@@ -9,38 +9,30 @@
 
 <div layout:fragment="content">
 
-    <form>
-        <div class="form-group">
-            <label for="exampleFormControlInput1">Email address</label>
-            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlSelect1">Example select</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlSelect2">Example multiple select</label>
-            <select multiple class="form-control" id="exampleFormControlSelect2">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">Example textarea</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        </div>
-    </form>
+    <div class="card">
 
+        <div class="card-header">New Category</div>
 
+        <form role="form" th:action="@{/app/category/create}"
+              th:object="${categoryCreateForm}" method="post">
+
+            <div class="card-body">
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">error</p>
+                    <input type="text" class="form-control" id="name" placeholder="Some category" th:field="*{name}" required>
+                </div>
+
+            </div>
+
+            <div class="card-footer">
+                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="submit" class="btn btn-primary float-right">Create</button>
+            </div>
+        </form>
+
+    </div>
 
 </div>
 

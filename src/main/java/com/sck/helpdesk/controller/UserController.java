@@ -1,20 +1,28 @@
 package com.sck.helpdesk.controller;
 
+import com.sck.helpdesk.domain.UserEntity;
+import com.sck.helpdesk.dto.UserCreateForm;
+import com.sck.helpdesk.dto.UserEditForm;
 import com.sck.helpdesk.repository.UserRepository;
+import com.sck.helpdesk.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/app/user")
 public class UserController {
 
+    private final UserService userService;
     private final UserRepository userRepository;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserService userService, UserRepository userRepository) {
+        this.userService = userService;
         this.userRepository = userRepository;
     }
 
@@ -37,19 +45,65 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('AGENT')")
-    @GetMapping("/edit/{id}")
-    public String displayEdit(Model model, @PathVariable Long id) {
+    @GetMapping("/{id}/edit")
+    public String displayEdit(Model model, @PathVariable Long id, UserEditForm userEditForm) {
 
-        model.addAttribute("user", userRepository.getOne(id));
+        UserEntity userEntity = userRepository.getOne(id);
+
+        model.addAttribute("user", userEntity);
+
+        userEditForm.setType(userEntity.getType());
+        userEditForm.setUsername(userEntity.getUsername());
 
         return "user/edit";
     }
 
     @PreAuthorize("hasRole('AGENT')")
+    @PostMapping("/{id}/edit")
+    public String handleEdit(Model model, @PathVariable Long id, UserEditForm userEditForm) {
+
+        UserEntity userEntity = userRepository.getOne(id);
+
+        userEntity.setUsername(userEditForm.getUsername());
+        userEntity.setType(userEditForm.getType());
+
+        userRepository.save(userEntity);
+
+        return "redirect:/app/user/" + id;
+    }
+
+    @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/create")
-    public String displayCreate(Model model) {
+    public String displayCreate(Model model, UserCreateForm userCreateForm) {
 
         return "user/create";
+    }
+
+    @PreAuthorize("hasRole('AGENT')")
+    @PostMapping("/create")
+    public String handleCreate(Model model, UserCreateForm userCreateForm) {
+
+        UserEntity createdUser = userService.createUser(
+                userCreateForm.getUsername(),
+                userCreateForm.getPassword(),
+                userCreateForm.getType()
+        );
+
+        return "redirect:/app/user/" + createdUser.getId();
+    }
+
+    @PreAuthorize("hasRole('AGENT')")
+    @PostMapping("/{id}/delete")
+    public String handleDelete(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Can't delete this user, make sure it isn't in use!");
+            return "redirect:/app/user/"+id;
+        }
+
+        return "redirect:/app/user";
     }
 
 }
