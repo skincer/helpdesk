@@ -12,6 +12,7 @@ public class CategoryEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
     @OneToMany

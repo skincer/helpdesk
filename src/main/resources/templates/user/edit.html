@@ -9,11 +9,13 @@
 
 <div layout:fragment="content">
 
+    <p class="text-center text-danger" th:if="${error}" th:text="${error}"></p>
+
     <div class="card">
 
         <div class="card-header">Edit User</div>
 
-        <form role="form" th:action="@{/app/user/create}"
+        <form role="form" th:action="@{/app/user/{id}/edit(id=${user.id})}"
               th:object="${userEditForm}" method="post">
 
             <div class="card-body">

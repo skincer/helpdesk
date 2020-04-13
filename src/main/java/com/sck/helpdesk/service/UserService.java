@@ -18,10 +18,23 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserEntity createUser(final String username, final String password, final UserEntity.UserType userType) {
+    public UserEntity editUser(final Long id, final String username, final UserEntity.UserType userType) throws Exception {
 
-        // Mayhap throw exception here instead
-        if(userRepository.findByUsername(username) != null) return null;
+        UserEntity userEntity = userRepository.getOne(id);
+
+        if(!userEntity.getUsername().equalsIgnoreCase(username)) {
+            if(userRepository.findByUsername(username) != null) throw new Exception("Username already exists");
+        }
+
+        userEntity.setUsername(username);
+        userEntity.setType(userType);
+
+        return userRepository.save(userEntity);
+    }
+
+    public UserEntity createUser(final String username, final String password, final UserEntity.UserType userType) throws Exception {
+
+        if(userRepository.findByUsername(username) != null) throw new Exception("Username already exists");
 
         UserEntity user = new UserEntity(
                 username, passwordEncoder.encode(password), userType

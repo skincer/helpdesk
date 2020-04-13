@@ -8,11 +8,15 @@ import com.sck.helpdesk.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/app/user")
@@ -60,16 +64,24 @@ public class UserController {
 
     @PreAuthorize("hasRole('AGENT')")
     @PostMapping("/{id}/edit")
-    public String handleEdit(Model model, @PathVariable Long id, UserEditForm userEditForm) {
+    public String handleEdit(Model model, @PathVariable Long id, @Valid UserEditForm userEditForm, BindingResult bindingResult) {
 
-        UserEntity userEntity = userRepository.getOne(id);
+        UserEntity editedUser;
+        try {
+            editedUser = userService.editUser(
+                    id,
+                    userEditForm.getUsername(),
+                    userEditForm.getType()
+            );
+        } catch (Exception e) {
+            UserEntity userEntity = userRepository.getOne(id);
+            bindingResult.rejectValue("username", "error.username", "Must be unique");
+            model.addAttribute("error", "Can't update this user, check errors below.");
+            model.addAttribute("user", userEntity);
+            return "user/edit";
+        }
 
-        userEntity.setUsername(userEditForm.getUsername());
-        userEntity.setType(userEditForm.getType());
-
-        userRepository.save(userEntity);
-
-        return "redirect:/app/user/" + id;
+        return "redirect:/app/user/" + editedUser.getId();
     }
 
     @PreAuthorize("hasRole('AGENT')")
@@ -81,13 +93,20 @@ public class UserController {
 
     @PreAuthorize("hasRole('AGENT')")
     @PostMapping("/create")
-    public String handleCreate(Model model, UserCreateForm userCreateForm) {
+    public String handleCreate(Model model, @Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
 
-        UserEntity createdUser = userService.createUser(
-                userCreateForm.getUsername(),
-                userCreateForm.getPassword(),
-                userCreateForm.getType()
-        );
+        UserEntity createdUser;
+        try {
+            createdUser = userService.createUser(
+                    userCreateForm.getUsername(),
+                    userCreateForm.getPassword(),
+                    userCreateForm.getType()
+            );
+        } catch (Exception e) {
+            bindingResult.rejectValue("username", "error.username", "Must be unique");
+            model.addAttribute("error", "Can't create this user, check errors below.");
+            return "user/create";
+        }
 
         return "redirect:/app/user/" + createdUser.getId();
     }
