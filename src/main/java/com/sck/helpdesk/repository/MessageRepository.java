@@ -9,4 +9,6 @@ import java.util.List;
 public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
 
     List<MessageEntity> findAllByTicket(TicketEntity ticket);
+
+    List<MessageEntity> findFirst10ByContentContainingIgnoreCaseOrderByIdDesc(String content);
 }

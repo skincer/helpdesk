@@ -30,9 +30,13 @@
                 <a class="nav-link" th:href="@{/app/report}">Reports</a>
             </li>
         </ul>
-        <span class="navbar-text text-info pr-3" th:text="${#authentication.principal.username}">Current User</span>
-        <form class="form-inline" th:action="@{/logout}" method="post">
-            <button class="btn btn-outline-success" type="submit">Logout</button>
+        <form class="form-inline my-2 my-lg-0" th:action="@{/app/search}" method="post">
+            <input class="form-control mr-sm-2" th:name="query" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0 mr-4" type="submit">Search</button>
+        </form>
+        <form class="form-inline my-2 my-lg-0" th:action="@{/logout}" method="post">
+            <span class="navbar-text text-info mr-sm-2" th:text="${#authentication.principal.username}">Current User</span>
+            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Logout</button>
         </form>
     </div>
 </nav>

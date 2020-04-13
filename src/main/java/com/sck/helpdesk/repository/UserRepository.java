@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findAllByType(UserEntity.UserType type);
 
     List<UserEntity> findFirstByTypeOrderByTicketsAssigned(UserEntity.UserType type);
+
+    List<UserEntity> findFirst10ByUsernameContainingIgnoreCaseOrderByIdDesc(String usernameFragment);
 }
