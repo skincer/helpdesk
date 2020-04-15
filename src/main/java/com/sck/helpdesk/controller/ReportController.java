@@ -46,10 +46,4 @@ public class ReportController {
         return "report/customersByTickets";
     }
 
-    @GetMapping("/ticketsByMessages")
-    public String displayTicketsByMessages(Model model) {
-
-        return "report/ticketsByMessages";
-    }
-
 }

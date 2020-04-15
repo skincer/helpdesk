@@ -27,10 +27,10 @@ public class UserEntity {
     private UserType type;
 
 
-    @OneToMany
+    @OneToMany(mappedBy = "userCreated")
     private Set<TicketEntity> ticketsCreated = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "userAssigned")
     private Set<TicketEntity> ticketsAssigned = new HashSet<>();
 
     @OneToMany
