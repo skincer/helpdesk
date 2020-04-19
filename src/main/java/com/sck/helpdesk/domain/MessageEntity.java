@@ -1,7 +1,6 @@
 package com.sck.helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sck.helpdesk.security.CurrentUserUtility;
 
 import javax.persistence.*;
 import java.util.Date;

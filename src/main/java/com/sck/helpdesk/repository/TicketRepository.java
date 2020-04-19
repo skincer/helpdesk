@@ -3,7 +3,6 @@ package com.sck.helpdesk.repository;
 import com.sck.helpdesk.domain.TicketEntity;
 import com.sck.helpdesk.domain.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 

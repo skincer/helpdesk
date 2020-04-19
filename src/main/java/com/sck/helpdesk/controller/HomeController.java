@@ -1,9 +1,7 @@
 package com.sck.helpdesk.controller;
 
-import com.sck.helpdesk.repository.TicketRepository;
 import com.sck.helpdesk.security.CurrentUserUtility;
 import com.sck.helpdesk.service.TicketService;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
